@@ -51,10 +51,14 @@ print("Matrice des pixels réduits :", small_image.shape)
 print(small_image)
 """
 
+from classify.py import classify_pixel
 
 
+emissivity_matrix = np.zeros((pixelated_image[0], pixelated_image[0]), dtype=float)
+for i in range(pixelated_image.shape[0]):
+    for j in range(pixelated_image.shape[1]):
+        rgb = pixels[i,j]
+        surface_class = classify_pixel(rgb)
+        emissivity_matrix = emissivity_table[surface_class]
 
-
-
-
-emissivity_matrix = np.zeros(())
+print (emissivity_matrix.shape)
