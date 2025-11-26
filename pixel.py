@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-
+import csv
 # Charger l'image
 image = mpimg.imread("epfl_sat.jpg")  # Remplace par ton fichier ATTENTION, EN .jpg !!!!!!!
 #nombre de pixels
@@ -25,12 +25,12 @@ pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
 #chaque  pixel devient un gros carré-->agrandissement
 
 
-"""
-plt.imshow(pixelated_image.astype(np.uint8))
-plt.axis("off")  # Pour enlever les axes
+
+#plt.imshow(pixelated_image.astype(np.uint8))
+#plt.axis("off")  # Pour enlever les axes
 plt.imsave("image_pixellisee.jpg", pixelated_image.astype(np.uint8))
-plt.show()
-"""
+#plt.show()
+
 
 """
 plt.show()
@@ -51,15 +51,24 @@ print("Matrice des pixels réduits :", small_image.shape)
 print(small_image)
 """
 
-from classify.py import classify_pixel
+from classify import *
 
 
-emissivity_matrix = np.zeros((pixelated_image[0], pixelated_image[0]), dtype=float)
+emissivity_matrix = np.zeros((pixelated_image.shape[0],pixelated_image.shape[1]), dtype=float)
 for i in range(pixelated_image.shape[0]):
     for j in range(pixelated_image.shape[1]):
-        rgb = pixels[i,j]
-        surface_class = classify_pixel(rgb)
-        emissivity_matrix = emissivity_table[surface_class]
+        rgb = pixelated_image[i,j]
+        surface_class = classify_pixel_emissivite(rgb)
+        emissivity_matrix[i, j] = emissivity_table[surface_class]
+np.savetxt('emissivity_matrix.csv', emissivity_matrix, delimiter=',')
 
-print (emissivity_matrix.shape)
-#zgkzuhuhiuz
+
+
+albedo_matrix = np.zeros((pixelated_image.shape[0],pixelated_image.shape[1]), dtype=float)
+for i in range(pixelated_image.shape[0]):
+    for j in range(pixelated_image.shape[1]):
+        rgb = pixelated_image[i,j]
+        surface_class = classify_pixel_albedo(rgb)
+        albedo_matrix[i, j] = albedo_table[surface_class]
+#mettre la matrice en csv
+np.savetxt('albedo_matrix.csv', albedo_matrix, delimiter=',')
