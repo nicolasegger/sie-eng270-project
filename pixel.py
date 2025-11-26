@@ -62,3 +62,4 @@ for i in range(pixelated_image.shape[0]):
         emissivity_matrix = emissivity_table[surface_class]
 
 print (emissivity_matrix.shape)
+#zgkzuhuhiuz
