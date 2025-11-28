@@ -18,7 +18,7 @@ for i in range(target_height):
         block = image[i*h_step:(i+1)*h_step, j*w_step:(j+1)*w_step]
         small_image[i,j] = block.mean(axis=(0, 1))
 
-pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
+#pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
 #small_image : la version réduite (par exemple 50×50 pixels).
 #np.ones((h_step, w_step, 1)) : une matrice de 1 qui sert à répéter chaque pixel.
 #np.kron(A, B) : prend chaque élément de A et le multiplie par la matrice B, ce qui revient à répliquer chaque pixel en un bloc.
@@ -28,7 +28,8 @@ pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
 
 #plt.imshow(pixelated_image.astype(np.uint8))
 #plt.axis("off")  # Pour enlever les axes
-plt.imsave("image_pixellisee.jpg", pixelated_image.astype(np.uint8))
+#plt.imsave("image_pixellisee.jpg", pixelated_image.astype(np.uint8))
+plt.imsave("image_pixellisee.jpg", small_image.astype(np.uint8))
 #plt.show()
 
 
@@ -51,24 +52,23 @@ print("Matrice des pixels réduits :", small_image.shape)
 print(small_image)
 """
 
-from classify import *
+from projet1.classify import *
 
 
-emissivity_matrix = np.zeros((pixelated_image.shape[0],pixelated_image.shape[1]), dtype=float)
-for i in range(pixelated_image.shape[0]):
-    for j in range(pixelated_image.shape[1]):
-        rgb = pixelated_image[i,j]
+emissivity_matrix = np.zeros((small_image.shape[0],small_image.shape[1]), dtype=float)
+for i in range(small_image.shape[0]):
+    for j in range(small_image.shape[1]):
+        rgb = small_image[i,j]
         surface_class = classify_pixel_emissivite(rgb)
         emissivity_matrix[i, j] = emissivity_table[surface_class]
 np.savetxt('emissivity_matrix.csv', emissivity_matrix, delimiter=',')
 
 
 
-albedo_matrix = np.zeros((pixelated_image.shape[0],pixelated_image.shape[1]), dtype=float)
-for i in range(pixelated_image.shape[0]):
-    for j in range(pixelated_image.shape[1]):
-        rgb = pixelated_image[i,j]
+albedo_matrix = np.zeros((small_image.shape[0], small_image.shape[1]), dtype=float)
+for i in range(small_image.shape[0]):
+    for j in range(small_image.shape[1]):
+        rgb = small_image[i,j]
         surface_class = classify_pixel_albedo(rgb)
         albedo_matrix[i, j] = albedo_table[surface_class]
-#mettre la matrice en csv
 np.savetxt('albedo_matrix.csv', albedo_matrix, delimiter=',')
