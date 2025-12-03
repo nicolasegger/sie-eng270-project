@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #define ROWS 100
 #define COLS 100
@@ -39,8 +40,10 @@ double rayonnement = 1000;
 double temperature_surface = 0;
 
 //loi de stefan
-double stefan(double* matrix1, double* matrix2, double sigma){
-    temperature_surface = pow((((1-(double* albedo_matrix))*rayonnement)/((emissivity_matrix)*sigma)),(1/4));
+
+double stefan(double albedo, double emissivity, double sigma, double rayonnement) {
+    // Stefan-Boltzmann law: T = [ ( (1 - albedo) * rayonnement ) / (emissivity * sigma) ]^(1/4)
+    double temperature_surface = pow(((1.0 - albedo) * rayonnement) / (emissivity * sigma), 1.0/4.0);
     return temperature_surface;
 }
 
@@ -53,6 +56,15 @@ int main() {
     lire_csv("albedo_matrix.csv", albedomatrix);
     lire_csv("emissivity_matrix.csv", emissivitymatrix);
     
+    // calculs
+    for (int i = 0; i < ROWS; i++) {
+    for (int j = 0; j < COLS; j++) {
+        double albedo = albedomatrix[i][j];
+        double emissivity = emissivitymatrix[i][j];
+        double T = stefan(albedo, emissivity, sigma, rayonnement);
+        printf("Cell (%d,%d): T = %.2f K\n", i, j, T);
+    }
+    }
    
 /*
     // Exemple d'affichage de la matrice
