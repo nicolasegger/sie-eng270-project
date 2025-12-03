@@ -47,7 +47,7 @@ double stefan(double albedo, double emissivity, double sigma, double rayonnement
     return temperature_surface;
 }
 
-
+double tempMatrix[ROWS][COLS];
 int main() {
     double albedomatrix[ROWS][COLS];
     double emissivitymatrix[ROWS][COLS];
@@ -57,15 +57,36 @@ int main() {
     lire_csv("emissivity_matrix.csv", emissivitymatrix);
     
     // calculs
+
     for (int i = 0; i < ROWS; i++) {
-    for (int j = 0; j < COLS; j++) {
-        double albedo = albedomatrix[i][j];
-        double emissivity = emissivitymatrix[i][j];
-        double T = stefan(albedo, emissivity, sigma, rayonnement);
-        printf("Cell (%d,%d): T = %.2f K\n", i, j, T);
+        for (int j = 0; j < COLS; j++) {
+            double albedo = albedomatrix[i][j];
+            double emissivity = emissivitymatrix[i][j];
+            double T = stefan(albedo, emissivity, sigma, rayonnement);
+            tempMatrix[i][j] = T;
+        }
     }
-    }
-   
+
+    FILE *fp = fopen("temperature_matrix.csv", "w");
+        if (fp == NULL) {
+            perror("Erreur lors de la création du fichier CSV");
+            return 1;
+        }
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                fprintf(fp, "%.2f", tempMatrix[i][j]);
+                if (j < COLS - 1) {
+                    fprintf(fp, ",");
+                }
+            }
+            fprintf(fp, "\n");
+        }
+
+        fclose(fp);
+        printf("Fichier CSV créé : temperature_matrix.csv\n");
+
+
 /*
     // Exemple d'affichage de la matrice
     printf("Matrice lue (première ligne):\n");
