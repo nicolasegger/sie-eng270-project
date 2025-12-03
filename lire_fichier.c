@@ -43,7 +43,7 @@ double temperature_surface = 0;
 
 double stefan(double albedo, double emissivity, double sigma, double rayonnement) {
     // Stefan-Boltzmann law: T = [ ( (1 - albedo) * rayonnement ) / (emissivity * sigma) ]^(1/4)
-    double temperature_surface = pow(((1.0 - albedo) * rayonnement) / (emissivity * sigma), 1.0/4.0);
+    double temperature_surface = pow(((1.0 - albedo) * rayonnement) /(0.95 * sigma), (1.0/4.0));
     return temperature_surface;
 }
 
@@ -67,7 +67,7 @@ int main() {
         }
     }
 
-    FILE *fp = fopen("temperature_matrix.csv", "w");
+    FILE *fp = fopen("temperature_matrixe.csv", "w");
         if (fp == NULL) {
             perror("Erreur lors de la création du fichier CSV");
             return 1;
