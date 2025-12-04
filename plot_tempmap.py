@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Charger le CSV
-data = pd.read_csv("temperature_matrix.csv", header=None)
+data = pd.read_csv("temperature_matrixe.csv", header=None)
 
 # Convertir en matrice NumPy
 temperature_matrix = data.values
