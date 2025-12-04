@@ -5,7 +5,7 @@
 
 #define ROWS 100
 #define COLS 100
-#define MAX_LINE_LENGTH 2048
+#define MAX_LINE_LENGTH 4096
 
 
 void lire_csv(const char *filename, double matrix[ROWS][COLS]) {

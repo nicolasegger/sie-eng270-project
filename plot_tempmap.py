@@ -1,4 +1,4 @@
-
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -19,3 +19,15 @@ plt.ylabel("Lignes")
 
 # Afficher le plot
 plt.show()
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = np.loadtxt("temperature_matrix.csv", delimiter=",")
+
+plt.imshow(data, cmap="inferno", origin="lower")
+plt.colorbar(label="Température (K)")
+plt.title("Carte de température")
+plt.show()
+
+
