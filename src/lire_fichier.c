@@ -107,6 +107,8 @@ int main() {
 
 
 // ---- NOUVEAU : constants + stefan amélioré ----
+
+
 const double sigma = 5.67e-8;
 
 
@@ -198,3 +200,59 @@ int main() {
     printf("Fichier CSV créé : temperature_matrixe.csv\n");
     return 0;
 }
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
+
+// suppose que ROWS et COLS sont définis ailleurs
+// et que lire_csv et stefan_radiative_eq existent
+
+int main(int argc, char *argv[]) {
+    if (argc < 4) {
+        fprintf(stderr, "Usage: %s <albedo_csv> <emissivity_csv> <output_csv>\n", argv[0]);
+        return 1;
+    }
+
+    double albedomatrix[ROWS][COLS];
+    double emissivitymatrix[ROWS][COLS];
+    double tempMatrix[ROWS][COLS];
+
+    // lecture des fichiers passés en argument
+    lire_csv(argv[1], albedomatrix);
+    lire_csv(argv[2], emissivitymatrix);
+
+    // ---- paramètres atmosphériques ----
+    double Ta_K   = 298.15;
+    double ea_Pa  = 1500.0;
+    double S_down = 800.0;
+
+    // ---- boucle de calcul ----
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            double albedo     = albedomatrix[i][j];
+            double emissivity = emissivitymatrix[i][j];
+            double T = stefan_radiative_eq(albedo, emissivity, S_down, Ta_K, ea_Pa);
+            tempMatrix[i][j] = T;
+        }
+    }
+
+    // ---- sortie CSV (chemin passé en argument) ----
+    FILE *fp = fopen(argv[3], "w");
+    if (fp == NULL) {
+        perror("Erreur lors de la création du fichier CSV");
+        return 1;
+    }
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            fprintf(fp, "%.2f", tempMatrix[i][j]);
+            if (j < COLS - 1) fprintf(fp, ",");
+        }
+        fprintf(fp, "\n");
+    }
+    fclose(fp);
+
+    printf("Fichier CSV créé : %s\n", argv[3]);
+    return 0;
+}
+*/
