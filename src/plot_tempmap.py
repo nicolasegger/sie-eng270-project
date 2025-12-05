@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 projroot1 = Path(sys.path[0]).parent
 pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
-temp_path = projroot / "data" / "temperature_matrixe.csv"
+#temp_path = projroot / "data" / "temperature_matrixe.csv"
 data = np.loadtxt("temperature_matrixe.csv", delimiter=",")
 
 def mean_filter_2d(arr, k=5):
