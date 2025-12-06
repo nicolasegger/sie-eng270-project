@@ -4,7 +4,7 @@ from pixel import *
 import numpy as np
 import matplotlib.pyplot as plt
 from plot_tempmap import *
-
+projroot = Path(sys.path[0]).parent
 # On repart de ta variable 'fliped' déjà calculée
 hot_threshold = 355.0  # K
 
@@ -34,3 +34,34 @@ plt.contour(hot_mask.astype(int), levels=[1], colors="cyan", linewidths=1.2, ori
 plt.title(f"Zones les plus chaudes (T ≥ {hot_threshold:.1f} K)")
 plt.axis("off")
 plt.show()
+
+
+def save_hot_contours(fliped, hot_threshold=355.0, out_path="hot_contours.png",
+                      color="cyan", linewidth=1.5, origin="lower"):
+    """
+    Sauvegarde un fichier image (PNG) avec uniquement les contours des zones chaudes,
+    sur fond transparent.
+    """
+    H, W = fliped.shape
+    hot_mask = fliped >= hot_threshold
+
+    # Figure sans bord et fond transparent
+    fig = plt.figure(figsize=(8, 6), dpi=200)
+    ax = fig.add_axes([0, 0, 1, 1])  # plein cadre
+    ax.axis("off")
+
+    # Tracer uniquement les contours du masque
+    cs = ax.contour(
+        hot_mask.astype(int),
+        levels=[1],
+        colors=color,
+        linewidths=linewidth,
+        origin=origin,
+        extent=(0, W, 0, H) if origin == "lower" else (0, W, H, 0),
+    )
+
+    # Sauvegarde avec transparence
+    out_path = projroot / "data" / "contours.png"
+    fig.savefig(out_path, transparent=True, bbox_inches="tight", pad_inches=0)
+    plt.close(fig)
+    print(f"Contours enregistrés: {out_path.resolve()}")
