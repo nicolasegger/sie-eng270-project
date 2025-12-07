@@ -1,59 +1,71 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.ndimage import gaussian_filter
-from PIL import Image
-import sys
 from pathlib import Path
+from PIL import Image, ImageOps
+import sys
 
+# --- paramètres & chemins ---
 projroot = Path(sys.path[0]).parent
-path = projroot / "data" / "image_pixellisee.jpg"
+path = projroot / "data" / "temperature_matrixe.csv"
+sat_path = projroot / "data" / "image_pixellisee.jpg"
 
-# --- Paramètres ---
-hot_threshold = 355.0  # K
-smooth_sigma = 0.0     # Gaussian smoothing pour le masque (0 = pas de lissage)
-base_cmap = "Greys"    # Colormap pour l'image de fond
-contour_color = "cyan" # Couleur du contour
-contour_width = 1.5    # Épaisseur du contour
-alpha_base = 1.0       # Transparence de l'image de fond (1.0 = opaque)
+out_tempmap_png = projroot / "data" / "temperature_map.png"       # carte des températures
+out_overlay_png = projroot / "data" / "overlay_contours_on_sat.png"  # superposition finale
 
-# --- Donnée d'entrée attendue : 'fliped' ---
-# Assure-toi que la variable 'fliped' est définie avant d'exécuter ce code.
-# fliped = ...  # ton tableau 2D de températures (en K)
+# --- charge données ---
+data = np.loadtxt(path, delimiter=",")
 
-# 1) Calcul du masque chaud (>= seuil)
-image = Image.open(path)
-hot_mask = image >= hot_threshold
+# Filtre moyenneur (si nécessaire)
+def mean_filter_2d(arr, k=7):
+    if k % 2 == 0:
+        raise ValueError("k doit être impair")
+    pad = k // 2
+    arr_p = np.pad(arr, pad_width=pad, mode='edge')
+    cumsum_h = np.cumsum(arr_p, axis=1)
+    h = (cumsum_h[:, k:] - cumsum_h[:, :-k]) / k
+    h_p = np.pad(h, ((pad, pad), (0, 0)), mode='edge')
+    cumsum_v = np.cumsum(h_p, axis=0)
+    v = (cumsum_v[k:, :] - cumsum_v[:-k, :]) / k
+    return v
 
-# 2) Optionnel : lissage pour obtenir des contours plus doux
-if smooth_sigma and smooth_sigma > 0:
-    # On lisse l'image de température, puis on recalcule le masque sur l'image lissée
-    fliped_smooth = gaussian_filter(image, sigma=smooth_sigma)
-    hot_mask_for_contour = fliped_smooth >= hot_threshold
-else:
-    hot_mask_for_contour = hot_mask
+smoothed = mean_filter_2d(data, k=7)
+smoothed_rot = np.rot90(smoothed, 2)
+fliped = np.fliplr(smoothed_rot)
 
-# 3) Affichage : image originale + contour des zones chaudes
-plt.figure(figsize=(8, 6))
+H, W = fliped.shape
+hot_threshold = 355.0
+hot_mask = fliped >= hot_threshold
 
-# Image de fond (originale)
-im_base = plt.imshow(image, cmap=base_cmap, origin="lower", alpha=alpha_base)
-plt.title(f"Contours des zones chaudes superposés (T ≥ {hot_threshold:.1f} K)")
+# === 1) Carte des températures (PNG) ===
+plt.figure(figsize=(8, 6), dpi=200)
+im = plt.imshow(fliped, cmap="inferno", origin="lower", extent=(0, W, 0, H))
+cbar = plt.colorbar(im, label="Température (K)")
+plt.title("Carte de température (moyenne locale k=7)")
 plt.axis("off")
-
-# 4) Superposition du contour (en cyan, par défaut)
-# Utilise levels=[1] car hot_mask est binaire (0/1)
-plt.contour(
-    hot_mask_for_contour.astype(int),
-    levels=[1],
-    colors=contour_color,
-    linewidths=contour_width,
-    origin="lower",
-)
-
-# 5) Optionnel : colorbar de l'image de fond (température)
-cbar = plt.colorbar(im_base, label="Température (K)")
-# Si tu veux fixer la plage de couleurs :
-# im_base.set_clim(vmin=np.nanmin(fliped), vmax=np.nanmax(fliped))
-
+plt.tight_layout()
+plt.savefig(out_tempmap_png, dpi=200)
 plt.show()
+print(f"Carte des températures sauvegardée: {out_tempmap_png.resolve()}")
+
+# === 2) Superposition contours + image de fond (PNG) ===
+sat_img = Image.open(sat_path).convert("RGB")
+sat_img = ImageOps.flip(sat_img)  # flip vertical pour aligner
+sat_arr = np.array(sat_img)
+
+plt.figure(figsize=(8, 6), dpi=200)
+plt.imshow(sat_arr, extent=(0, W, 0, H), origin="lower")
+plt.contour(
+    hot_mask.astype(int),
+    levels=[1],
+    colors="cyan",
+    linewidths=1.5,
+    origin="lower",
+    extent=(0, W, 0, H)
+)
+plt.title(f"Zones chaudes superposées (T ≥ {hot_threshold:.1f} K)")
+plt.axis("off")
+plt.tight_layout()
+plt.savefig(out_overlay_png, dpi=200)
+plt.show()
+print(f"Superposition sauvegardée: {out_overlay_png.resolve()}")
