@@ -9,9 +9,9 @@ import sys
 projroot = Path(sys.path[0]).parent
 path = projroot / "data" / "temperature_matrixe.csv"
 sat_path = projroot / "data" / "image_pixellisee.jpg"
-
-out_tempmap_png = projroot / "data" / "temperature_map.png"       # carte des températures
-out_overlay_png = projroot / "data" / "overlay_contours_on_sat.png"  # superposition finale
+sat_path_2 = projroot / "data" / "plainpalais.jpg"
+out_tempmap_png = projroot / "data" / "tempmap.png"       # carte des températures
+out_overlay_png = projroot / "data" / "overlay_contours.png"  # superposition finale
 
 # --- charge données ---
 data = np.loadtxt(path, delimiter=",")
@@ -34,7 +34,7 @@ smoothed_rot = np.rot90(smoothed, 2)
 fliped = np.fliplr(smoothed_rot)
 
 H, W = fliped.shape
-hot_threshold = 355.0
+hot_threshold = 368.0
 hot_mask = fliped >= hot_threshold
 
 # === 1) Carte des températures (PNG) ===
@@ -49,7 +49,7 @@ plt.show()
 print(f"Carte des températures sauvegardée: {out_tempmap_png.resolve()}")
 
 # === 2) Superposition contours + image de fond (PNG) ===
-sat_img = Image.open(sat_path).convert("RGB")
+sat_img = Image.open(sat_path_2).convert("RGB")
 sat_img = ImageOps.flip(sat_img)  # flip vertical pour aligner
 sat_arr = np.array(sat_img)
 

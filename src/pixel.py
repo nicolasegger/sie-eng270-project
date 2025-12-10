@@ -8,10 +8,10 @@ import csv
 #define directories
 projroot = Path(sys.path[0]).parent
 #charge the image
-image_path = projroot / "data" / "epfl_sat.jpg"
+image_path = projroot / "data" / "plainpalais.jpg"
 image = mpimg.imread(image_path)
 #number of pixels
-target_height, target_width = 100, 150
+target_height, target_width = 100, 100
 #steps size
 h_step = image.shape[0] // target_height 
 w_step = image.shape[1] // target_width
@@ -23,7 +23,7 @@ for i in range(target_height):
         block = image[i*h_step:(i+1)*h_step, j*w_step:(j+1)*w_step]
         small_image[i,j] = block.mean(axis=(0, 1))
 
-#pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
+pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
 #small_image : la version reduite (par exemple 50 fois 50 pixels).
 #np.ones((h_step, w_step, 1)) : une matrice de 1 qui sert a repeter chaque pixel.
 #np.kron(A, B) : prend chaque element de A et le multiplie par la matrice B, ce qui revient a repliquer chaque pixel en un bloc.

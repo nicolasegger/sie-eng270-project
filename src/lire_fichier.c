@@ -68,8 +68,8 @@ int main() {
     double emissivitymatrix[ROWS][COLS];
     double tempMatrix[ROWS][COLS];
 
-    lire_csv("albedo_matrix.csv", albedomatrix);
-    lire_csv("emissivity_matrix.csv", emissivitymatrix);
+    lire_csv("../data/albedo_matrix.csv", albedomatrix);
+    lire_csv("../data/emissivity_matrix.csv", emissivitymatrix);
 
     // ---- NOUVEAU : paramètres atmosphériques ----
     double Ta_K   = 298.15;
@@ -87,7 +87,7 @@ int main() {
     }
 
     // ---- sortie CSV (nom corrigé) ----
-    FILE *fp = fopen("temperature_matrix.csv", "w");
+    FILE *fp = fopen("../data/temperature_matrixe.csv", "w");
     if (fp == NULL) {
         perror("Erreur lors de la création du fichier CSV");
         return 1;

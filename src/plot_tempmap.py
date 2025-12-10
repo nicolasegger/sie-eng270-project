@@ -45,7 +45,7 @@ plt.title("Carte de température (moyenne locale k=5)")
 plt.show()
 
 # On repart de ta variable 'fliped' déjà calculée
-hot_threshold = 355.0  # K
+hot_threshold = 370.0  # K
 
 # Masque des zones chaudes (>= seuil)
 hot_mask = fliped >= hot_threshold
@@ -99,8 +99,9 @@ def save_hot_contours(fliped, hot_threshold=355.0, out_path="hot_contours.png",
     )
 
     # Sauvegarde avec transparence
-    out_path = projroot / "data" / "contours.png"
+    out_path = projroot / "data" / "overlay_contours.png"
     fig.savefig(out_path, transparent=True, bbox_inches="tight", pad_inches=0)
     plt.close(fig)
     print(f"Contours enregistrés: {out_path.resolve()}")
-    
+
+save_hot_contours(fliped, hot_threshold=370)   
