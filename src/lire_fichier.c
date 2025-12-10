@@ -49,7 +49,7 @@ double stefan_radiative_eq(double albedo, double emissivity,
     double epsilon_a = 1.24 * pow(ea_mb / Ta_K, 1.0/7.0);
     if (epsilon_a > 1.0) epsilon_a = 1.0;
     if (epsilon_a < 0.0) epsilon_a = 0.0;
-    double L_down = epsilon_a * sigma * pow(Ta_K, 4.0);
+    double L_down = epsilon_a * sigma * pow(Ta_K, 4.0) - 20;
 
     double denom = emissivity * sigma;
     if (denom <= 0.0) denom = 1e-9;

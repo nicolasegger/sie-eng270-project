@@ -12,12 +12,17 @@ sat_path = projroot / "data" / "image_pixellisee.jpg"
 sat_path_2 = projroot / "data" / "plainpalais.jpg"
 out_tempmap_png = projroot / "data" / "tempmap.png"       # carte des températures
 out_overlay_png = projroot / "data" / "overlay_contours.png"  # superposition finale
-
+img = Image.open(sat_path_2)
+width, height = img.size
 # --- charge données ---
-data = np.loadtxt(path, delimiter=",")
+data1 = np.loadtxt(path, delimiter=",")
+
+data_img = Image.fromarray(data1)
+data = np.array(data_img.resize((width, height), resample=Image.NEAREST))
+
 
 # Filtre moyenneur (si nécessaire)
-def mean_filter_2d(arr, k=7):
+def mean_filter_2d(arr, k=9):
     if k % 2 == 0:
         raise ValueError("k doit être impair")
     pad = k // 2
@@ -29,19 +34,20 @@ def mean_filter_2d(arr, k=7):
     v = (cumsum_v[k:, :] - cumsum_v[:-k, :]) / k
     return v
 
-smoothed = mean_filter_2d(data, k=7)
+smoothed = mean_filter_2d(data1, k=9)
 smoothed_rot = np.rot90(smoothed, 2)
 fliped = np.fliplr(smoothed_rot)
 
 H, W = fliped.shape
-hot_threshold = 368.0
+
+hot_threshold = 366.0
 hot_mask = fliped >= hot_threshold
 
 # === 1) Carte des températures (PNG) ===
 plt.figure(figsize=(8, 6), dpi=200)
 im = plt.imshow(fliped, cmap="inferno", origin="lower", extent=(0, W, 0, H))
 cbar = plt.colorbar(im, label="Température (K)")
-plt.title("Carte de température (moyenne locale k=7)")
+plt.title(f"Carte de température (moyenne locale)")
 plt.axis("off")
 plt.tight_layout()
 plt.savefig(out_tempmap_png, dpi=200)
@@ -69,3 +75,51 @@ plt.tight_layout()
 plt.savefig(out_overlay_png, dpi=200)
 plt.show()
 print(f"Superposition sauvegardée: {out_overlay_png.resolve()}")
+
+"""
+
+# --- charge données ---
+data1 = np.loadtxt(path, delimiter=",")
+
+# Redimensionner la matrice à la taille de l'image
+data_img = Image.fromarray(data1)
+data_resized = np.array(data_img.resize((width, height), resample=Image.NEAREST))
+
+# Filtre moyenneur sur la matrice redimensionnée
+smoothed = mean_filter_2d(data_resized, k=21)
+smoothed_rot = np.rot90(smoothed, 2)
+fliped = np.fliplr(smoothed_rot)
+
+H, W = fliped.shape
+hot_threshold = 369.0
+hot_mask = fliped >= hot_threshold
+
+# === 1) Carte des températures ===
+plt.figure(figsize=(8, 6), dpi=200)
+im = plt.imshow(fliped, cmap="inferno", origin="lower")
+cbar = plt.colorbar(im, label="Température (K)")
+plt.title("Carte de température (moyenne locale)")
+plt.axis("off")
+plt.tight_layout()
+plt.savefig(out_tempmap_png, dpi=200)
+plt.show()
+
+# === 2) Superposition ===
+sat_img = Image.open(sat_path_2).convert("RGB")
+sat_img = ImageOps.flip(sat_img)  # flip vertical pour aligner
+sat_arr = np.array(sat_img)
+
+plt.figure(figsize=(8, 6), dpi=200)
+plt.imshow(sat_arr, origin="lower")  # pas besoin d'extent si tailles identiques
+plt.contour(
+    hot_mask.astype(int),
+    levels=[1],
+    colors="cyan",
+    linewidths=1.5,
+    origin="lower"
+)
+plt.title(f"Zones chaudes superposées (T ≥ {hot_threshold:.1f} K)")
+plt.axis("off")
+plt.tight_layout()
+plt.savefig(out_overlay_png, dpi=200)
+plt.show()"""

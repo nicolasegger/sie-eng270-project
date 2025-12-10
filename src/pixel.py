@@ -8,7 +8,7 @@ import csv
 #define directories
 projroot = Path(sys.path[0]).parent
 #charge the image
-image_path = projroot / "data" / "plainpalais.jpg"
+image_path = projroot / "data" / "epfl_sat.jpg"
 image = mpimg.imread(image_path)
 #number of pixels
 target_height, target_width = 100, 100
