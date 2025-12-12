@@ -7,17 +7,18 @@ import sys
 
 # --- paramètres & chemins ---
 projroot = Path(sys.path[0]).parent
-path = projroot / "data" / "temperature_matrixe.csv"
-sat_path = projroot / "data" / "image_pixellisee.jpg"
-sat_path_2 = projroot / "data" / "plainpalais.jpg"
-out_tempmap_png = projroot / "data" / "tempmap.png"       # carte des températures
-out_overlay_png = projroot / "data" / "overlay_contours.png"  # superposition finale
-img = Image.open(sat_path_2)
+matrix_path = projroot / "data" / "temperature_matrixe.csv"
+pix_path = projroot / "data" / "image_pixellisee.jpg"
+epfl_path = projroot / "data" / "epfl_sat.jpg"
+plainpalais_path = projroot / "data" / "plainpalais.jpg"
+out_tempmap_png = projroot / "results" / "tempmap.png"       # carte des températures
+out_overlay_png = projroot / "results" / "overlay_contours.png"  # superposition finale
+img = Image.open(pix_path)
 width, height = img.size
 # --- charge données ---
-data1 = np.loadtxt(path, delimiter=",")
+data = np.loadtxt(matrix_path, delimiter=",")
 
-data_img = Image.fromarray(data1)
+data_img = Image.fromarray(data)
 data = np.array(data_img.resize((width, height), resample=Image.NEAREST))
 
 
@@ -34,13 +35,13 @@ def mean_filter_2d(arr, k=9):
     v = (cumsum_v[k:, :] - cumsum_v[:-k, :]) / k
     return v
 
-smoothed = mean_filter_2d(data1, k=9)
+smoothed = mean_filter_2d(data, k=9)
 smoothed_rot = np.rot90(smoothed, 2)
 fliped = np.fliplr(smoothed_rot)
 
 H, W = fliped.shape
 
-hot_threshold = 366.0
+hot_threshold = 314.0
 hot_mask = fliped >= hot_threshold
 
 # === 1) Carte des températures (PNG) ===
@@ -55,7 +56,7 @@ plt.show()
 print(f"Carte des températures sauvegardée: {out_tempmap_png.resolve()}")
 
 # === 2) Superposition contours + image de fond (PNG) ===
-sat_img = Image.open(sat_path_2).convert("RGB")
+sat_img = Image.open(plainpalais_path).convert("RGB")
 sat_img = ImageOps.flip(sat_img)  # flip vertical pour aligner
 sat_arr = np.array(sat_img)
 

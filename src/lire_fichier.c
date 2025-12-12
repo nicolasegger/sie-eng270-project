@@ -82,7 +82,7 @@ int main() {
             double albedo    = albedomatrix[i][j];
             double emissivity = emissivitymatrix[i][j];
             double T = stefan_radiative_eq(albedo, emissivity, S_down, Ta_K, ea_Pa);
-            tempMatrix[i][j] = T;
+            tempMatrix[i][j] = T - 50;
         }
     }
 
