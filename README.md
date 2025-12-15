@@ -13,17 +13,20 @@ The programm superposition.py uses this csv file to represent graphically the te
 Templates for .tex and .odt formats are provided in "docs/". The formatting can be changed, but the sections should remain the same. The final report should be placed in "docs/" as "report.pdf".
 # Running the program
 ## Dependencies
-
-Describe the operating system, programs (MATLAB/Python/C), version numbers, and external packages that need to be installed to run the program. Canonically, it should run on the SIE Linux VDI, but if you require a different configuration (e.g., more updated MATLAB version) you can state it here.
+The complete folder contains four files 
+ -------- supp Describe the operating system, programs (MATLAB/Python/C), version numbers, and external packages that need to be installed to run the program.
 ## Build
-
+the c programm is compiled with a **gcc** command the the file **read_file** (executable) is create in the folder bin
 Describe how the C program should be compiled (using gcc or mex). The executable or shared object file can be placed in the "bin/" directory.
 ## Execute
-
-Describe how the program should be executed. Ideally, it will be automated to one line of code in a terminal running Bash (e.g., matlab -batch src/myscript), with the outputs generated to "results/".
+The programm can be executed directly from the terminal using the shellscript (app.sh file)
+To compute the programm, the user has to move on the desktop to the place where the project is downloaded with the command : cd $(find . -name "CMT" -type d)
+Once in the right place, the execution can be completed with: ./app.sh
+Resume (once on the terminal):
+1. cd $(find . -name "CMT" -type d)
+2. ./app.sh
 ## Contributors
-
-List the authors of the code.
+Nicolas Egger & Diego Dellamula
 # Acknowledgments
 ## Data sources
 
