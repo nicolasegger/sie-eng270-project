@@ -1,25 +1,27 @@
 #python3 ~src./pixel.py data./epfl_sat.jpg
 
-#find . -name "app.sh"
-#cd ~/Desktop/myfiles/CMT
+#cd $(find . -name "CMT" -type d | head -n 1)
+
 
 #!/bin/bash
 set -e
 set -x
 #cd "$(dirname "$0")"
 
-# 1. Traitement de l'image satellite
-python3 src/pixel.py src/classify.py data/epfl_sat.jpg
+#demander au prof ou sera le dossier
+ #modif!!!
+# 1. treatment of the image
+python3 src/pixel.py src/classify.py data/plainpalais.jpg
 
-# 2. Compilation du programme C
-gcc src/lire_fichier.c -o src/lire_fichier -lm
+# 2. porgramm C compilation
+gcc src/read_file.c -o bin/read_file -lm
 
-# 3. Exécution du programme C
-cd src
-./lire_fichier data/albedo_matrix.csv data/emissivity_matrix.csv data/temperature_matrixe.csv
+# 3. execution of the programm C
+cd bin
+./read_file data/albedo_matrix.csv data/emissivity_matrix.csv results/temperature_matrixe.csv
 cd ..
-# 4. Superposition finale
-python3 src/superposition.py data/temperature_matrixe.csv
+# 4. final overlay
+python3 src/overlay.py results/temperature_matrixe.csv
 
 
 

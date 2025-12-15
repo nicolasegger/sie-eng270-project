@@ -9,12 +9,10 @@
 
 
 
-// ---- NOUVEAU : constants + stefan amélioré ----
-
 
 const double sigma = 5.67e-8;
 
-
+// ouvrir fichiers
 void lire_csv(const char *filename, double matrix[ROWS][COLS]) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -40,7 +38,7 @@ void lire_csv(const char *filename, double matrix[ROWS][COLS]) {
     fclose(file);
     
 }
-
+//stefan
 
 double stefan_radiative_eq(double albedo, double emissivity,
                            double S_down, double Ta_K, double ea_Pa)
@@ -49,7 +47,7 @@ double stefan_radiative_eq(double albedo, double emissivity,
     double epsilon_a = 1.24 * pow(ea_mb / Ta_K, 1.0/7.0);
     if (epsilon_a > 1.0) epsilon_a = 1.0;
     if (epsilon_a < 0.0) epsilon_a = 0.0;
-    double L_down = epsilon_a * sigma * pow(Ta_K, 4.0) - 20;
+    double L_down = epsilon_a * sigma * pow(Ta_K, 4.0);
 
     double denom = emissivity * sigma;
     if (denom <= 0.0) denom = 1e-9;
@@ -58,11 +56,7 @@ double stefan_radiative_eq(double albedo, double emissivity,
     return pow(numerateur / denom, 0.25);
 }
 
-// ---- ta fonction lire_csv(...) inchangée ----
-
-// ---- variables globales si tu y tiens ----
-// double sigma = 5.67e-8;   // <- si tu l’avais ici, garde une seule définition
-
+//main
 int main() {
     double albedomatrix[ROWS][COLS];
     double emissivitymatrix[ROWS][COLS];
@@ -71,12 +65,12 @@ int main() {
     lire_csv("../data/albedo_matrix.csv", albedomatrix);
     lire_csv("../data/emissivity_matrix.csv", emissivitymatrix);
 
-    // ---- NOUVEAU : paramètres atmosphériques ----
+    // param
     double Ta_K   = 298.15;
     double ea_Pa  = 1500.0;
-    double S_down = 800.0;            // ou "rayonnement" si tu veux garder ta variable
+    double S_down = 800.0;           
 
-    // ---- NOUVELLE BOUCLE DE CALCUL ----
+   
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
             double albedo    = albedomatrix[i][j];
@@ -86,8 +80,8 @@ int main() {
         }
     }
 
-    // ---- sortie CSV (nom corrigé) ----
-    FILE *fp = fopen("../data/temperature_matrixe.csv", "w");
+    //sortie CSV
+    FILE *fp = fopen("../results/temperature_matrixe.csv", "w");
     if (fp == NULL) {
         perror("Erreur lors de la création du fichier CSV");
         return 1;

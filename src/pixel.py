@@ -28,7 +28,7 @@ pixelated_image = np.kron(small_image, np.ones((h_step, w_step, 1)))
 #np.ones((h_step, w_step, 1)) : une matrice de 1 qui sert a repeter chaque pixel.
 #np.kron(A, B) : prend chaque element de A et le multiplie par la matrice B, ce qui revient a repliquer chaque pixel en un bloc.
 #chaque  pixel devient un gros carre-->agrandissement
-out_path1 = projroot / "data" / "image_pixellisee.jpg"
+out_path1 = projroot / "data" / "image_pixel.jpg"
 
 plt.imsave(out_path1, small_image.astype(np.uint8))
 sys.path.append(str(projroot / "src"))
