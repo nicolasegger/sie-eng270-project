@@ -16,7 +16,7 @@ Templates for .tex and .odt formats are provided in "docs/". The formatting can 
 The complete folder contains four files 
  -------- supp Describe the operating system, programs (MATLAB/Python/C), version numbers, and external packages that need to be installed to run the program.
 ## Build
-the c programm is compiled with a **gcc** command the the file **read_file** (executable) is create in the folder bin
+the c programm is compiled with a **gcc** command the the file ``read_file`` (executable) is create in the folder bin
 Describe how the C program should be compiled (using gcc or mex). The executable or shared object file can be placed in the "bin/" directory.
 ## Execute
 The programm can be executed directly from the terminal using the shellscript (app.sh file)
