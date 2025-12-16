@@ -28,7 +28,8 @@ Resume (once on the terminal):
 Nicolas Egger & Diego Dellamula
 # Acknowledgments
 ## Data sources
-
+Image manipulation: 
+Ploting:  https://numpy.org/doc/stable/user/absolute_beginners.html#plotting-arrays-with-matplotlib
 Describe sources of data here.
 ## Code
 
