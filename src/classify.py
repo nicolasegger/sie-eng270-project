@@ -1,5 +1,5 @@
 import numpy as np
-# Table simplifiée d'émissivité
+# Table 1
 emissivity_table = {
     "vegetation": 0.98,
     "water": 0.96,
@@ -18,14 +18,13 @@ def classify_pixel_emissivite(rgb):
     else:
         return "asphalt"
     
-
-# Table simplifiée d'albedo
+# Table 2
 albedo_table = {
-    "vegetation": 0.25,  # Exemple d'albédo pour la végétation
-    "water": 0.05,       # Albédo pour l'eau
-    "concrete": 0.30,    # Albédo pour le béton
-    "asphalt": 0.15,     # Albédo pour l'asphalte
-    "metal": 0.60        # Albédo pour le métal
+    "vegetation": 0.25, 
+    "water": 0.05,       
+    "concrete": 0.30,    
+    "asphalt": 0.15,     
+    "metal": 0.60        
 }
 
 def classify_pixel_albedo(rgb):
