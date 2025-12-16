@@ -6,10 +6,6 @@
 #define COLS 100
 #define MAX_LINE_LENGTH 4096
 
-
-
-
-
 const double sigma = 5.67e-8;
 
 // ouvrir fichiers
@@ -35,11 +31,10 @@ void lire_csv(const char *filename, double matrix[ROWS][COLS]) {
         row++;
     }
 
-    fclose(file);
-    
+    fclose(file);    
 }
-//stefan
 
+//stefan
 double stefan_radiative_eq(double albedo, double emissivity,
                            double S_down, double Ta_K, double ea_Pa)
 {
@@ -65,7 +60,7 @@ int main() {
     lire_csv("../data/albedo_matrix.csv", albedomatrix);
     lire_csv("../data/emissivity_matrix.csv", emissivitymatrix);
 
-    // param
+// param
     double Ta_K   = 298.15;
     double ea_Pa  = 1500.0;
     double S_down = 800.0;           
@@ -80,7 +75,7 @@ int main() {
         }
     }
 
-    //sortie CSV
+//sortie CSV
     FILE *fp = fopen("../results/temperature_matrixe.csv", "w");
     if (fp == NULL) {
         perror("Erreur lors de la création du fichier CSV");
@@ -97,4 +92,3 @@ int main() {
     printf("Fichier CSV créé : temperature_matrixe.csv\n");
     return 0;
 }
-
