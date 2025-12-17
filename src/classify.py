@@ -1,5 +1,5 @@
 import numpy as np
-# Table 1
+# Emmissivity table 
 emissivity_table = {
     "vegetation": 0.98,
     "water": 0.96,
@@ -18,7 +18,7 @@ def classify_pixel_emissivite(rgb):
     else:
         return "asphalt"
     
-# Table 2
+#  Albedo table 
 albedo_table = {
     "vegetation": 0.25, 
     "water": 0.05,       
@@ -26,7 +26,7 @@ albedo_table = {
     "asphalt": 0.15,     
     "metal": 0.60        
 }
-
+# Classification
 def classify_pixel_albedo(rgb):
     r, g, b = rgb
     if g > b and g > r:
