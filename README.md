@@ -1,4 +1,5 @@
-# Project_CMT
+# Project CMT
+#Heat Islands simulation
 ## Project Description
 The prupose of the project is to highlight potentials heat islands based on a simple satelite picture using Stefan's law as a model.
 ## Input files
