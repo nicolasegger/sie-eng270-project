@@ -9,8 +9,7 @@ Furthermore, the file pixel.py creates 2 csv files (albedo_matrix.csv & emmissiv
 The first file that is compiled by read_file.c is the file temperature_matrixe.csv that represent the temperature value of each pixel of the 100x100 pixelised image
 The programm superposition.py uses this csv file to represent graphically the temperature map and the "hot zones" following the parametre hot_threshold
 ## Report
-
-Templates for .tex and .odt formats are provided in "docs/". The formatting can be changed, but the sections should remain the same. The final report should be placed in "docs/" as "report.pdf".
+You can find the detailed report in the docs file.
 # Running the program
 ## Dependencies
 The programm uses Python 2.7.18 and C. It runs on Linux using the installed VDI. We used princippaly numpy libraries and matplotlib.
