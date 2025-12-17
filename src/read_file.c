@@ -1,4 +1,4 @@
-#include <stdio.h>
+ files#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -8,7 +8,7 @@
 
 const double sigma = 5.67e-8;
 
-// ouvrir fichiers
+// open files
 void lire_csv(const char *filename, double matrix[ROWS][COLS]) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -34,7 +34,7 @@ void lire_csv(const char *filename, double matrix[ROWS][COLS]) {
     fclose(file);    
 }
 
-//stefan
+//define stefan's law
 double stefan_radiative_eq(double albedo, double emissivity,
                            double S_down, double Ta_K, double ea_Pa)
 {
@@ -60,12 +60,11 @@ int main() {
     lire_csv("../data/albedo_matrix.csv", albedomatrix);
     lire_csv("../data/emissivity_matrix.csv", emissivitymatrix);
 
-// param
+// parametrisation
     double Ta_K   = 298.15;
     double ea_Pa  = 1500.0;
     double S_down = 800.0;           
-
-   
+//creating the matrix
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
             double albedo    = albedomatrix[i][j];
@@ -75,7 +74,7 @@ int main() {
         }
     }
 
-//sortie CSV
+//crearting temperature_matrixe.csv
     FILE *fp = fopen("../results/temperature_matrixe.csv", "w");
     if (fp == NULL) {
         perror("Erreur lors de la création du fichier CSV");
