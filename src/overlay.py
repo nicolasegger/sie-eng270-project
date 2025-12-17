@@ -5,8 +5,9 @@ from pathlib import Path
 from PIL import Image, ImageOps
 import sys
 
-# paths
+# paths defining paths
 projroot = Path(sys.path[0]).parent
+
 matrix_path = projroot / "results" / "temperature_matrixe.csv"
 pix_path = projroot / "data" / "image_pixel.jpg"
 epfl_path = projroot / "data" / "epfl_sat.jpg"
@@ -15,14 +16,14 @@ out_tempmap_png = projroot / "results" / "tempmap.png"       # carte des tempér
 out_overlay_png = projroot / "results" / "overlay_contours.png"  # superposition finale
 img = Image.open(pix_path)
 width, height = img.size
-# datas
+# resizing image (for overlaying)
 data = np.loadtxt(matrix_path, delimiter=",")
 
 data_img = Image.fromarray(data)
 data = np.array(data_img.resize((width, height), resample=Image.NEAREST))
 
 
-# mean filter
+# mean filter (smooth the temperature differences)
 def mean_filter_2d(arr, k=9):
     if k % 2 == 0:
         raise ValueError("k doit être impair")
@@ -34,7 +35,8 @@ def mean_filter_2d(arr, k=9):
     cumsum_v = np.cumsum(h_p, axis=0)
     v = (cumsum_v[k:, :] - cumsum_v[:-k, :]) / k
     return v
-
+    
+# Fliping image after CSV treatment
 smoothed = mean_filter_2d(data, k=9)
 smoothed_rot = np.rot90(smoothed, 2)
 fliped = np.fliplr(smoothed_rot)
@@ -44,7 +46,7 @@ H, W = fliped.shape
 hot_threshold =  float(np.percentile(fliped, 85))
 hot_mask = fliped >= hot_threshold
 
-#tempmap
+#creating temperature map
 plt.figure(figsize=(8, 6), dpi=200)
 im = plt.imshow(fliped, cmap="inferno", origin="lower", extent=(0, W, 0, H))
 cbar = plt.colorbar(im, label="Temperature (K)")
@@ -55,7 +57,7 @@ plt.savefig(out_tempmap_png, dpi=200)
 plt.show()
 print(f"Carte des températures sauvegardée: {out_tempmap_png.resolve()}")
 
-# overlay + jpg + flip
+# creating overlay map
 sat_img = Image.open(plainpalais_path).convert("RGB")
 sat_img = ImageOps.flip(sat_img)  
 sat_arr = np.array(sat_img)
