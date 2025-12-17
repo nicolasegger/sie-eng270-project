@@ -8,10 +8,12 @@ from classify import *
 
 #define paths
 projroot = Path(sys.path[0]).parent
-#charge the image
+
+#download the image
 image_path = projroot / "data" / "plainpalais.jpg"
 image = mpimg.imread(image_path)
-#number of pixels
+
+#fixing number of pixels 
 target_height, target_width = 100, 100
 #steps size
 h_step = image.shape[0] // target_height 
