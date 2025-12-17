@@ -7,6 +7,7 @@ emissivity_table = {
     "asphalt": 0.93,
     "metal": 0.60
 }
+#classification emmiss
 def classify_pixel_emissivite(rgb):
     r,g,b = rgb
     if g>b and g>r:
@@ -26,7 +27,7 @@ albedo_table = {
     "asphalt": 0.15,     
     "metal": 0.60        
 }
-# Classification
+# Classification albedo
 def classify_pixel_albedo(rgb):
     r, g, b = rgb
     if g > b and g > r:
