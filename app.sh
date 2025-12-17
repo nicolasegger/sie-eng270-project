@@ -8,8 +8,7 @@ set -e
 set -x
 #cd "$(dirname "$0")"
 
-#demander au prof ou sera le dossier
- #modif!!!
+
 # 1. treatment of the image
 python3 src/pixel.py src/classify.py data/plainpalais.jpg
 
