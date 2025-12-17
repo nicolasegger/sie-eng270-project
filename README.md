@@ -27,7 +27,7 @@ Resume (once on the terminal):
 Nicolas Egger & Diego Dellamula
 # Acknowledgments
 ## Data sources
-We actually created our data ourself so we don't have data sources.
+Sattelites pictures are screenshots taken from the web site: map.geo.admin.ch.
 ## Code
 The code is mainly inspired by our ideas, the project on heat island of Gramener: https://github.com/gramener/urban-heat-islands, our previous courses (ICC : pixelizing an image), from the website sieprog.ch for dealing with C, and the teachers webpage : https://stakahama.gitlab.io/sie-eng270/intro_Python_shellscripting.html for automation. We have to mention also that artificial intelligence helped us to debug and gave us suggestions.  
 
