@@ -15,7 +15,7 @@ Templates for .tex and .odt formats are provided in "docs/". The formatting can 
 ## Dependencies
 The programm uses Python 2.7.18 and C. It runs on Linux using the installed VDI. We used princippaly numpy libraries and matplotlib.
 ## Build
-the c programm is compiled with a ``gcc`` command the the file ``read_file`` (executable) is create in the folder bin
+The C programm is compiled with a ``gcc`` command the the file ``read_file`` (executable) is create in the folder bin
 Describe how the C program should be compiled (using gcc or mex). The executable or shared object file can be placed in the "bin/" directory.
 ## Execute
 The programm can be executed directly from the terminal using the shellscript (app.sh file)
